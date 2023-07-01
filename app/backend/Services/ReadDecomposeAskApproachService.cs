@@ -12,29 +12,26 @@ internal sealed class ReadDecomposeAskApproachService : IApproachBasedService
     private readonly AzureOpenAITextCompletionService _completionService;
 
     private const string AnswerPromptPrefix = """
-        Answer questions using the given knowledge ONLY. For tabular information return it as an HTML table. Do not return markdown format.
-        Each knowledge has a source name followed by a colon and the actual information, always include the source name for each knowledge you use in the answer.
-        Don't cite knowledge that is not available in the knowledge list.
-        If you cannot answer using the knowledge list only, say you don't know.
+        与えられたナレッジのみを使って質問に答えてください。表形式の情報については、HTMLテーブルとして返してください。マークダウン形式で返さないでください。各ナレッジにはソース名の後にコロンと実際の情報が続きます。
+        ただしナレッジリストにない情報を引用しないこととします。
+        ナレッジリストだけでは答えられない場合は、「わからない」と答えてください。
 
-        ### EXAMPLE
-        Question: 'What is the deductible for the employee plan for a visit to Overlake in Bellevue?'
+        ### 例
+        Question: '水素ハイブリッド電車とはなんですか?'
 
         Knowledge:
-        info1.txt: deductibles depend on whether you are in-network or out-of-network. In-network deductibles are $500 for employees and $1000 for families. Out-of-network deductibles are $1000 for employees and $2000 for families.
-        info2.pdf: Overlake is in-network for the employee plan.
-        info3.pdf: Overlake is the name of the area that includes a park and ride near Bellevue.
-        info4.pdf: In-network institutions include Overlake, Swedish, and others in the region
+        info1.txt: 水素をエネルギー源とする燃料電池は、高いエネルギー変換効率と環境負荷の少なさが特徴
+        info2.txt: 燃料電池自動車やバスの技術を鉄道車両の技術と融合・応用することにより、水素ハイブリッド電車を開発し、実証試験を始めた。
 
         Answer:
-        In-network deductibles are $500 for employees and $1000 for families [info1.txt] and Overlake is in-network for the employee plan [info2.pdf][info4.pdf].
+        水素を燃料とする燃料電池は、高いエネルギー変換効率と環境負荷の少なさが特徴[info1.txt]です。この技術を鉄道車両に応用し、水素ハイブリッド電車を開発し、実証試験を始めました。[info2.txt] 
 
-        Question: 'What happens in a performance review'
+        Question: 'Azureの特徴を教えてください'
 
         Knowledge:
 
         Answer:
-        I don't know
+        分かりません
         ###
         Knowledge:
         {{$knowledge}}
@@ -46,21 +43,21 @@ internal sealed class ReadDecomposeAskApproachService : IApproachBasedService
         """;
 
     private const string CheckAnswerAvailablePrefix = """
-        Use only 0 or 1 to in your reply. return 0 if the answer is unknown, otherwise return 1.
+        答えが不明な場合は0を返し、そうでない場合は1を返します。
 
         Answer:
         {{$answer}}
 
-        ### EXAMPLE
-        Answer: I don't know
+        ### 例
+        Answer: 分かりません
         Your reply:
         0
 
-        Answer: I don't know the answer
+        Answer: 回答が分かりません
         Your reply:
         0
 
-        Answer: In-network deductibles are $500 for employees and $1000 for families [info1.txt] and Overlake is in-network for the employee plan [info2.pdf][info4.pdf].
+        Answer: 水素を燃料とする燃料電池は、高いエネルギー変換効率と環境負荷の少なさが特徴[info1.txt]です。この技術を鉄道車両に応用し、水素ハイブリッド電車を開発し、実証試験を始めました。[info2.txt] 
         Your reply:
         1
         ###
@@ -69,25 +66,13 @@ internal sealed class ReadDecomposeAskApproachService : IApproachBasedService
         """;
 
     private const string ExplainPrefix = """
-        Summarize the knowledge you need to know to answer the question. Please don't include
-        the existing knowledge in the answer
+        質問に答えるために必要なナレッジをまとめてください。回答には既存のナレッジを含めないでください。
 
-        ### EXAMPLES:
-        Knowledge: ''
-        Question: 'What is the deductible for the employee plan for a visit to Overlake in Bellevue?'
-        Explain: I need to know the information of employee plan and Overlake in Bellevue.
+        ### 例:
 
-        Knowledge: ''
-        Question: 'What happens in a performance review?'
-        Your reply: I need to know what's performance review.
-
-        Knowledge: 'Microsoft is a software company'
-        Question: 'When is annual review time for employees in Microsoft'
-        Explain: I need to know the information of annual review time for employees in Microsoft.
-
-        Knowledge: 'Microsoft is a software company'
-        Question: 'What is included in my Northwind Health Plus plan that is not in standard?'
-        Explain: I need to know what's Northwind Health Plus Plan and what's not standard in that plan.
+        Knowledge: 'エネルギー制御システムは、燃料電池、バッテリー、電気モーターなどの各コンポーネントのエネルギー供給と消費を調整します'
+        Question: 'エネルギー制御システムとはなにか教えてください'
+        Explain: 水素ハイブリット電車におけるエネルギー制御システムの役割が知りたい
         ###
         Knowledge:
         {{$knowledge}}
@@ -99,20 +84,10 @@ internal sealed class ReadDecomposeAskApproachService : IApproachBasedService
         """;
 
     private const string GenerateKeywordsPrompt = """
-        Generate keywords from explanation, separate multiple keywords with comma.
+        説明からキーワードを生成します。複数のキーワードはカンマで区切ります。
 
-        ### EXAMPLE:
-        Explanation: I need to know the information of employee plan and Overlake in Bellevue
-        Keywords: employee plan, Overlake Bellevue
-
-        Explanation: I need to know the duty of product manager
-        Keywords: product manager
-
-        Explanation: I need to know information of annual eye exam.
-        Keywords: annual eye exam
-
-        Explanation: I need to know what's Northwind Health Plus Plan and what's not standard in that plan.
-        Keywords: Northwind Health Plus plan
+        Explain: 水素ハイブリッド電車の普及に伴い、水素供給基盤の整備と安全性の向上が進んでいます。
+        キーワード: 水素ハイブリッド電車, 水素供給基盤
         ###
 
         Explanation:
@@ -121,26 +96,25 @@ internal sealed class ReadDecomposeAskApproachService : IApproachBasedService
         """;
 
     private const string ThoughtProcessPrompt = """
-        Describe the thought process of answering the question using given question, explanation, keywords, information, and answer.
+        与えられた質問、説明、キーワード、情報、回答を用いて、質問に答えるための思考プロセスを記述します。
 
-        ### EXAMPLE:
-        Question: 'how many employees does Microsoft has now'
+        ### 例:
+        Question: 'マイクロソフトの従業員数は？'
 
-        Explanation: I need to know the information of Microsoft and its employee number.
+        Explanation: マイクロソフトの情報と社員数を知りたい。
 
-        Keywords: Microsoft, employee number
+        Keywords: Microsoft, 社員数
 
-        Information: [google.pdf]: Microsoft has over 144,000 employees worldwide as of 2019.
+        Information: [google.pdf]: マイクロソフトは2019年現在、全世界で14万4000人以上の従業員を抱えています。
 
-        Answer: I don't know how many employees does Microsoft has now, but in 2019, Microsoft has over 144,000 employees worldwide.
+        Answer: マイクロソフトが現在何人の従業員を抱えているかは知りませんが、2019年のマイクロソフトの従業員数は全世界で14万4000人を超えています。
 
         Summary:
-        The question is about how many employees does Microsoft has now.
-        To answer the question, I need to know the information of Microsoft and its employee number.
-        I use keywords Microsoft, employee number to search information, and I find the following information:
-         - [google.pdf] Microsoft has over 144,000 employees worldwide as of 2019.
-        Using that information, I formalize the answer as
-         - I don't know how many employees does Microsoft has now, but in 2019, Microsoft has over 144,000 employees worldwide.
+        マイクロソフトの従業員数は何人ですか？
+        質問に答えるには、マイクロソフトの情報と従業員数を知る必要があります。
+        マイクロソフト、従業員数というキーワードで情報を検索してみると、以下のような情報が見つかりました：
+         - [google.pdf] マイクロソフトは2019年現在、全世界で14万4000人以上の従業員を抱えている。 この情報を使って、私は答えを次のように定式化しました。
+         - マイクロソフトが現在何人の従業員を抱えているかは知りませんが、2019年のマイクロソフトの従業員数は全世界で14万4000人を超えています。
         ###
 
         question:
@@ -162,13 +136,13 @@ internal sealed class ReadDecomposeAskApproachService : IApproachBasedService
         """;
 
     private const string PlannerPrefix = """
-        do the following steps:
-         - explain what you need to know to answer the $question.
-         - generating $keywords from explanation.
-         - use $keywords to lookup or search information.
-         - update information to $knowledge.
-         - summarize the entire process and update $summary.
-         - answer the question based on the knowledge you have.
+        次のステップを行います:
+         - $question に答えるために必要なことを説明します
+         - 説明から $keywords を生成します
+         - $keywords を使用して情報を検索します
+         - 得られた情報で $knowledge を更新します
+         - プロセス全体を要約し、$summary を更新します
+         - あなたが持っている知識に基づいて答えてください
         """;
 
     public Approach Approach => Approach.ReadDecomposeAsk;

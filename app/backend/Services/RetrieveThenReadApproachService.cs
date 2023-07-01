@@ -7,24 +7,22 @@ internal sealed class RetrieveThenReadApproachService : IApproachBasedService
     private readonly SearchClient _searchClient;
 
     private const string SemanticFunction = """
-          You are an intelligent assistant helping Contoso Inc employees with their healthcare plan questions and employee handbook questions.
-          Use 'you' to refer to the individual asking the questions even if they ask with 'I'.
-          Answer the following question using only the data provided in the sources below.
-          For tabular information return it as an HTML table. Do not return markdown format.
-          Each source has a name followed by a colon and the actual information, always include the source name for each fact you use in the response.
-          If you cannot answer using the sources below, say you don't know.
+          あなたは鉄道技術に関する質問をサポートする教師アシスタントです。
+          質問者が「私」で質問しても、「あなた」を使って質問者を指すようにしてください。
+          次の質問に、以下の出典で提供されたデータのみを使用して答えてください。
+          表形式の情報については、HTMLテーブルとして返してください。マークダウン形式は返さないでください。
+          各出典元には、名前の後にコロンが続き、実際の情報が記載されています。回答で使用する情報には、必ず出典元名を記載してください。
+          以下の情報源で答えられない場合は、「わからない」と答えてください。
           
           ###
-          Question: 'What is the deductible for the employee plan for a visit to Overlake in Bellevue?'
+          Question: '水素ハイブリット電車とはなんですか？'
           
           Sources:
-          info1.txt: deductibles depend on whether you are in-network or out-of-network. In-network deductibles are $500 for employees and $1000 for families. Out-of-network deductibles are $1000 for employees and $2000 for families.
-          info2.pdf: Overlake is in-network for the employee plan.
-          info3.pdf: Overlake is the name of the area that includes a park and ride near Bellevue.
-          info4.pdf: In-network institutions include Overlake, Swedish, and others in the region
+          info1.txt: 水素をエネルギー源とする燃料電池は、高いエネルギー変換効率と環境負荷の少なさが特徴
+          info2.txt: 燃料電池自動車やバスの技術を鉄道車両の技術と融合・応用することにより、水素ハイブリッド電車を開発し、実証試験を始めた。
           
           Answer:
-          In-network deductibles are $500 for employees and $1000 for families [info1.txt] and Overlake is in-network for the employee plan [info2.pdf][info4.pdf].
+          水素を燃料とする燃料電池は、高いエネルギー変換効率と環境負荷の少なさが特徴[info1.txt]です。この技術を鉄道車両に応用し、水素ハイブリッド電車を開発し、実証試験を始めました。[info2.txt] 
           
           ###
           Question: {{$question}}?

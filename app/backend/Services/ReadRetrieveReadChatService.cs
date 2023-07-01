@@ -10,28 +10,28 @@ public class ReadRetrieveReadChatService
     private readonly IConfiguration _configuration;
 
     private const string FollowUpQuestionsPrompt = """
-        After answering question, also generate three very brief follow-up questions that the user would likely ask next.
-        Use double angle brackets to reference the questions, e.g. <<Are there exclusions for prescriptions?>>.
-        Try not to repeat questions that have already been asked.
-        Only generate questions and do not generate any text before or after the questions, such as 'Next Questions'
+        質問に答えた後、ユーザーが次に尋ねそうな3つの簡単なフォローアップ質問も作成します。
+        質問を参照するには、二重の角括弧を使用します（例：<<水素式燃料電池駆動電車とはなにですか?>>）
+        すでに聞かれた質問を繰り返さないようにしましょう。
+        質問のみを生成し、「次の質問」のような質問の前後にテキストを生成しないでください。
         """;
 
     private const string AnswerPromptTemplate = """
         <|im_start|>system
-        You are a system assistant who helps the company employees with their healthcare plan questions, and questions about the employee handbook. Be brief in your answers.
-        Answer ONLY with the facts listed in the list of sources below. If there isn't enough information below, say you don't know. Do not generate answers that don't use the sources below.
+        あなたは鉄道技術に関する質問をサポートする教師アシスタントで、水素ハイブリット電車の技術に関する質問をサポートしています。回答は簡潔にしてください。
+        以下の出典リストに記載されている事実のみを答えます。以下の情報が十分でない場合は、わからないと答えましょう。以下の出典を使用しない解答は作成しないでください。
         {{$follow_up_questions_prompt}}
-        For tabular information return it as an html table. Do not return markdown format.
-        Each source has a name followed by colon and the actual information, ALWAYS reference source for each fact you use in the response. Use square brakets to reference the source. List each source separately.
+        表形式の情報については、HTMLテーブルとして返してください。マークダウン形式は返さないでください。
+        各出典元には、名前の後にコロンと実際の情報が続きます。回答で使用する事実については、「必ず」出典元を参照してください。出典を参照するには、四角いブラケットを使用します。なお各出典は別々に記載してください。
         {{$injected_prompt}}
 
-        Here're a few examples:
-        ### Good Example 1 (include source) ###
-        Apple is a fruit[reference1.pdf].
-        ### Good Example 2 (include multiple source) ###
-        Apple is a fruit[reference1.pdf][reference2.pdf].
-        ### Good Example 2 (include source and use double angle brackets to reference question) ###
-        Microsoft is a software company[reference1.pdf].  <<followup question 1>> <<followup question 2>> <<followup question 3>>
+        例:
+        ### 例1 (出典を含む) ###
+        リンゴは果物である[reference1.pdf]。
+        ### 例2 (複数の出典を含む) ###
+        リンゴは果物である[reference1.pdf][reference2.pdf]。
+        ### 例3 (出典を記載し、二重角括弧を使用して質問を参照している) ###
+        マイクロソフトはソフトウエア企業である[reference1.pdf].  <<followup question 1>> <<followup question 2>> <<followup question 3>>
         ### END ###
         Sources:
         {{$sources}}
@@ -141,19 +141,19 @@ public class ReadRetrieveReadChatService
     {
         var queryPromptTemplate = """
             <|im_start|>system
-            Chat history:
+            チャット履歴:
             {{$chat_history}}
             
-            Here's a few examples of good search queries:
-            ### Good example 1 ###
-            Northwind Health Plus AND standard plan
-            ### Good example 2 ###
-            standard plan AND dental AND employee benefit
+            良い検索クエリの例:
+            ### 良い例 その1 ###
+            水素ハイブリット電車 AND 燃料電池
+            ### 良い例 その2 ###
+            水素供給ステーション AND 輸送 AND 貯蔵
             ###
 
             <|im_end|>
             <|im_start|>system
-            Generate search query for followup question. You can refer to chat history for context information. Just return search query and don't include any other information.
+            フォローアップ質問の検索クエリを生成します。文脈情報のためにチャット履歴を参照することができます。検索クエリを返すだけで、他の情報は含まれません。
             {{$question}}
             <|im_end|>
             <|im_start|>assistant
