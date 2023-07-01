@@ -4,122 +4,122 @@
 [![Open in GitHub - Codespaces](https://img.shields.io/static/v1?style=for-the-badge&label=GitHub+Codespaces&message=Open&color=brightgreen&logo=github)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=624102171&machine=standardLinux32gb&devcontainer_path=.devcontainer%2Fdevcontainer.json&location=WestUs2)
 [![Open in Remote - Containers](https://img.shields.io/static/v1?style=for-the-badge&label=Remote%20-%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/azure-samples/azure-search-openai-demo-csharp)
 
-This sample demonstrates a few approaches for creating ChatGPT-like experiences over your own data using the Retrieval Augmented Generation pattern. It uses Azure OpenAI Service to access the ChatGPT model (`gpt-35-turbo`), and Azure Cognitive Search for data indexing and retrieval.
+このサンプルでは、Retrieval Augmented Generation パターンを使用して、独自のデータで ChatGPT のような生成AIを活用したアプリケーションを開発します。ChatGPT モデル (`gpt-35-turbo`) へのアクセスには Azure OpenAI を使用し、データのインデックス化と検索には Azure Cognitive Search を使用します。
 
-The repo includes sample data so it's ready to try end-to-end. In this sample application, we use a fictitious company called Contoso Electronics, and the experience allows its employees to ask questions about the benefits, internal policies, as well as job descriptions and roles.
+このリポジトリにはサンプルデータが含まれているので、エンドツーエンドで試すことができます。このサンプルアプリケーションでは、鉄道技術に関する架空の論文をデータとして使い、水素ハイブリット電車に関する技術的な質問に答えることができます。
 
 ![RAG Architecture](docs/appcomponents-version-3.png)
 
-For more details on how this application was built, check out:
+このアプリケーションの開発の詳細については、こちらの記事をご参照ください:
 
 - [Transform your business with smart .NET apps powered by Azure and ChatGPT blog post](https://aka.ms/build-dotnet-ai-blog)
 - [Build Intelligent Apps with .NET and Azure - Build Session](https://build.microsoft.com/sessions/f8f953f3-2e58-4535-92ae-5cb30ef2b9b0)
 
-We want to hear from you! Are you interested in building or currently building intelligent apps? Take a few minutes to complete this survey.
 
-[**Take the survey**](https://aka.ms/dotnet-build-oai-survey)
+## サンプルアプリケーションの機能
 
-## Features
-
-* Voice Chat, Chat and Q&A interfaces
-* Explores various options to help users evaluate the trustworthiness of responses with citations, tracking of source content, etc.
-* Shows possible approaches for data preparation, prompt construction, and orchestration of interaction between model (ChatGPT) and retriever (Cognitive Search)
-* Settings directly in the UX to tweak the behavior and experiment with options
+* ボイスチャット/文字チャット/Q&Aインターフェース
+* 引用やソースコンテンツの追跡など、ユーザーが回答の信頼性を評価するためのさまざまなオプション
+* データ準備、プロンプト構築、モデル（ChatGPT）と検索（Cognitive Search）間のオーケストレーション
 
 ![Chat screen](docs/chatscreen.png)
 
-## Getting Started
+## サンプルアプリケーションの実行手順
 
-> **Note**<br>
-> In order to deploy and run this example, you'll need an **Azure subscription with access enabled for the Azure OpenAI service**. You can request access [here](https://aka.ms/oaiapply). You can also visit [here](https://azure.microsoft.com/free/cognitive-search/) to get some free Azure credits to get you started.
+> **💡注意💡**<br>
+>このサンプルをデプロイして実行するには、**Azure OpenAIサービスへのアクセスを有効にしたAzureサブスクリプション**が必要です。 [申請](https://aka.ms/oaiapply)はこちらです。また、Azureのサブスクリプション自体をお持ちでない方は[こちら](https://azure.microsoft.com/free/cognitive-search/)にアクセスして、Azureのトライアルを申請できます。
 
-> **Warning**<br>
-> By default this sample will create an Azure App Service, Azure Static Web App, and Azure Cognitive Search resource that have a monthly cost, as well as Form Recognizer resource that has cost per document page. You can switch them to free versions of each of them if you want to avoid this cost by changing the parameters file under the infra folder (though there are some limits to consider; for example, you can have up to 1 free Cognitive Search resource per subscription, and the free Form Recognizer resource only analyzes the first 2 pages of each document.)
+> **🚩警告🚩**<br>
+>デフォルトでは、このサンプルは、月額費用が発生する Azure App Service、Azure Static Web App、Azure Cognitive Search リソースと、ドキュメントページごとに費用が発生する Form Recognizer リソースを作成します。このコストを回避したい場合は、`infra` フォルダ下のパラメータファイルを変更することで、それぞれのリソースを無料版に切り替えることができます (ただし、考慮すべき制限もあります。たとえば、無料の Cognitive Search リソースは 1 サブスクリプションにつき 1 つまでで、無料の Form Recognizer リソースは各ドキュメントの最初の 2 ページのみしか分析できません)
 
-### Prerequisites
+### 前提条件
 
-#### To Run Locally
+#### ローカルで実行する場合
 
 - [Azure Developer CLI](https://aka.ms/azure-dev/install)
 - [.NET 7](https://dotnet.microsoft.com/download)
 - [Git](https://git-scm.com/downloads)
-- [Powershell 7+ (pwsh)](https://github.com/powershell/powershell) - For Windows users only.
-   - **Important**: Ensure you can run `pwsh.exe` from a PowerShell command. If this fails, you likely need to upgrade PowerShell.
+- [Powershell 7+ (pwsh)](https://github.com/powershell/powershell) - For Windows ユーザのみ
+   - **重要**: PowerShell コマンドから `pwsh.exe` を実行できることを確認します。失敗した場合は、PowerShellをアップグレードする必要があります。
 - [Docker](https://www.docker.com/products/docker-desktop/)
-  - **Important**: Ensure Docker is running before running any `azd` provisioning / deployment commands.
+  - **重要**: `azd` のプロビジョニング/デプロイコマンドを実行する前に、Docker が起動していることを確認してください。
 
-> **Note**<br>
-> Your Azure Account must have `Microsoft.Authorization/roleAssignments/write` permissions, such as [User Access Administrator](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#user-access-administrator) or [Owner](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#owner).
 
-#### To Run in GitHub Codespaces or VS Code Remote Containers
+> **💡注意💡**<br>
+> Azure アカウントには、[User Access Administrator](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#user-access-administrator) または [Owner](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#owner) などの `Microsoft.Authorization/roleAssignments/write` 権限が必要です。
 
-You can run this repo virtually by using GitHub Codespaces or VS Code Remote Containers.  Click on one of the buttons below to open this repo in one of those options.
+
+#### GitHubコードスペースまたはVS Codeリモートコンテナで実行する場合
+
+GitHub Codespaces または Visual Studio Code Dev Container を利用できます。以下のボタンのいずれかをクリックして、このリポジトリを開いてください。
 
 [![Open in GitHub - Codespaces](https://img.shields.io/static/v1?style=for-the-badge&label=GitHub+Codespaces&message=Open&color=brightgreen&logo=github)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=624102171&machine=standardLinux32gb&devcontainer_path=.devcontainer%2Fdevcontainer.json&location=WestUs2)
 [![Open in Remote - Containers](https://img.shields.io/static/v1?style=for-the-badge&label=Remote%20-%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/azure-samples/azure-search-openai-demo-csharp)
 
-### Installation
 
-#### Project Initialization
+### インストール
 
-1. Create a new folder and switch to it in the terminal
-1. Run `azd auth login`
-1. Run `azd init -t azure-search-openai-demo-csharp`
-    * For the target location, the regions that currently support the models used in this sample are **East US** or **South Central US**. For an up-to-date list of regions and models, check [here](https://learn.microsoft.com/azure/cognitive-services/openai/concepts/models)
+#### プロジェクトの初期化
 
-#### Starting from scratch
+1. 新しいフォルダを作成し、ターミナルでそのフォルダに移動
+1. `azd auth login` 実行
+1. `azd init -t azure-search-openai-demo-csharp` 実行
+    * このサンプルで使用されているモデルを現在サポートしている地域は、**米国東部**または**米国南中部**です。最新の地域とモデルのリストについては、 [こちら](https://learn.microsoft.com/azure/cognitive-services/openai/concepts/models)をチェックしてください。
 
-Execute the following command, if you don't have any pre-existing Azure services and want to start from a fresh deployment.
+#### スクラッチから開始する場合
 
-1. Run `azd up` - This will provision Azure resources and deploy this sample to those resources, including building the search index based on the files found in the `./data` folder.
+既存のAzureサービスがなく、新しいデプロイから始めたい場合は、以下のコマンドを実行します。
 
-> **Note**<br>
-> This application uses the `text-davinci-003` and `gpt-35-turbo` models. When choosing which region to deploy to, make sure they're available in that region (i.e. EastUS). For more information, see the [Azure OpenAI Service documentation](https://learn.microsoft.com/en-us/azure/cognitive-services/openai/concepts/models#gpt-3-models-1).  
+1. `azd up` を実行 - Azure リソースをプロビジョニングし、このサンプルをそれらのリソースにデプロイします。
 
-1. After the application has been successfully deployed you will see a URL printed to the console.  Click that URL to interact with the application in your browser.  
+> **💡注意💡**<br>
+> このアプリケーションは `text-davinci-003` と `gpt-35-turbo` のモデルを使用しています。どのリージョンにデプロイするかを選択する際には、そのリージョンで利用可能であることを確認してください（例: EastUS） 詳細については [Azure OpenAI Service documentation](https://learn.microsoft.com/en-us/azure/cognitive-services/openai/concepts/models#gpt-3-models-1)を参照してください。
 
-It will look like the following:
+
+1. アプリケーションが正常にデプロイされると、コンソールにURLが表示されます。 そのURLをクリックして、ブラウザでアプリケーションを開きます。
 
 !['Output from running azd up'](assets/endpoint.png)
 
-> **Note**<br>
-> It may take a few minutes for the application to be fully deployed.
+> **💡注意💡**<br>
+> アプリケーションが完全にデプロイされるまで数分かかる場合があります。
 
-#### Use existing resources
 
-1. Run `azd env set AZURE_OPENAI_SERVICE {Name of existing OpenAI service}`
-1. Run `azd env set AZURE_OPENAI_RESOURCE_GROUP {Name of existing resource group that OpenAI service is provisioned to}`
-1. Run `azd env set AZURE_OPENAI_CHATGPT_DEPLOYMENT {Name of existing ChatGPT deployment}`. Only needed if your ChatGPT deployment is not the default 'chat'.
-1. Run `azd env set AZURE_OPENAI_GPT_DEPLOYMENT {Name of existing GPT deployment}`. Only needed if your ChatGPT deployment is not the default `davinci`.
-1. Run `azd up`
+#### 既存のリソースを利用する場合
 
-> NOTE: You can also use existing Search and Storage Accounts.  See `./infra/main.parameters.json` for list of environment variables to pass to `azd env set` to configure those existing resources.
+1. `azd env set AZURE_OPENAI_SERVICE {既存のOpenAIのサービス名}` を実行
+1. `azd env set AZURE_OPENAI_RESOURCE_GROUP {OpenAIサービスがプロビジョニングされる既存のリソースグループ名}` を実行
+1. `azd env set AZURE_OPENAI_CHATGPT_DEPLOYMENT {既存のChatGPTデプロイメントの名前}` を実行。※この手順はChatGPT デプロイメントがデフォルトの 'chat' でない場合にのみ必要
+1. `azd env set AZURE_OPENAI_GPT_DEPLOYMENT {既存の GPT デプロイメントの名前}` を実行します。※この手順はChatGPT デプロイメントがデフォルトの `davinci` でない場合のみ必要
+1. `azd up` を実行
 
-#### Deploying or re-deploying a local clone of the repo
+> **📝メモ📝**<br>
+> 既存の Search Account や Storage Account を利用することもできます。 既存のリソースを設定するために `azd env set` に渡す環境変数のリストについては `./infra/main.parameters.json` を参照してください。
 
-* Run `azd up`
+#### リポジトリのクローンのデプロイまたは再デプロイの場合
 
-#### Deploying your repo using App Spaces
+* `azd up` の実行
 
-> **Note**<br>
-> Make sure you have AZD supported bicep files in your repository and add an initial GitHub Actions Workflow file which can either be triggered manually (for initial deployment) or on code change (automatically re-deploying with the latest changes)
-> To make your repository compatible with App Spaces, you need to make changes to your main bicep and main parameters file to allow AZD to deploy to an existing resource group with the appropriate tags.
+#### 4. App Spacesを使ってレポをデプロイする場合
 
-1. Add AZURE_RESOURCE_GROUP to main parameters file to read the value from environment variable set in GitHub Actions workflow file by App Spaces.
+> **📝メモ📝**<br>
+> リポジトリにazdがサポートするbicepファイルがあることを確認し、手動（初回デプロイ用）またはコード変更時（最新の変更で自動的に再デプロイ）にトリガーできる初期GitHub Actions Workflowファイルを追加します。
+> リポジトリをApp Spacesと互換性を持たせるには、AZDが適切なタグを持つ既存のリソースグループにデプロイできるように、メインのバイセップとメインのパラメーターファイルを変更する必要があります。
+
+1. メインパラメータファイルにAZURE_RESOURCE_GROUPを追加し、App SpacesがGitHub Actionsワークフローファイルに設定した環境変数の値を読み込むようにします。
    ```json
    "resourceGroupName": {
       "value": "${AZURE_RESOURCE_GROUP}"
     }
-2. Add AZURE_TAGS to main parameters file to read the value from environment variable set in GitHub Actions workflow file by App Spaces.
+2. メインパラメータファイルにAZURE_TAGSを追加し、App SpacesがGitHub Actionsワークフローファイルに設定した環境変数から値を読み込むようにする。
    ```json
    "tags": {
       "value": "${AZURE_TAGS}"
     }
-3. Add support for resource group and tags in your main bicep file to read the value being set by App Spaces.
+3. App Spacesによって設定されている値を読み取るために、メインのbicepファイルにリソースグループとタグのサポートを追加します。
    ```bicep
    param resourceGroupName string = ''
    param tags string = ''
-4. Combine the default tags set by Azd with those being set by App Spaces. Replace *tags initialization* in your main bicep file with the following - 
+4. `azd`によって設定されたデフォルトのタグと、App Spacesによって設定されたタグを組み合わせる。メインのbicepファイルの*tags initialization*を以下のように置き換えます
    ```bicep
    var baseTags = { 'azd-env-name': environmentName }
    var updatedTags = union(empty(tags) ? {} : base64ToJson(tags), baseTags)
@@ -131,45 +131,50 @@ It will look like the following:
      tags: updatedTags
    }
 
-#### Running locally
+#### ローカルでの実行の場合
 
-1. Run `azd auth login`
-1. After the application deploys, set the environment variable `AZURE_KEY_VAULT_ENDPOINT`. You can find the value in the *.azure/YOUR-ENVIRONMENT-NAME/.env* file or the Azure portal.
-1. Run the following .NET CLI command to start the ASP.NET Core Minimal API server (client host):
-
+1. `azd auth login` の実行
+1. アプリケーションがデプロイされたら、環境変数 `AZURE_KEY_VAULT_ENDPOINT` を設定します。この値は *.azure/YOUR-ENVIRONMENT-NAME/.env* ファイルまたは Azure ポータルで確認
+1. 次のコマンドを実行して、ASP.NET Core Minimal API サーバー（クライアントホスト）を起動
     ```dotnetcli
     dotnet run --project ./app/backend/MinimalApi.csproj --urls=https://localhost:7181/
     ```
 
-Navigate to <https://localhost:7181>, and test out the app.
+ブラウザで<https://localhost:7181>に移動し、アプリを試してみてください。
 
-#### Sharing Environments
+#### 環境の共有
 
-Run the following if you want to give someone else access to the deployed and existing environment.
+デプロイされた既存の環境へのアクセス権を他の人に与えたい場合は、以下を実行してください。
 
-1. Install the [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli)
-1. Run `azd init -t azure-search-openai-demo-csharp`
-1. Run `azd env refresh -e {environment name}` - Note that they will need the azd environment name, subscription Id, and location to run this command - you can find those values in your `./azure/{env name}/.env` file.  This will populate their azd environment's .env file with all the settings needed to run the app locally.
-1. Run `pwsh ./scripts/roles.ps1` - This will assign all of the necessary roles to the user so they can run the app locally.  If they do not have the necessary permission to create roles in the subscription, then you may need to run this script for them. Just be sure to set the `AZURE_PRINCIPAL_ID` environment variable in the azd .env file or in the active shell to their Azure Id, which they can get with `az account show`.
+1. [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli)のインストール
+1. `azd init -t azure-search-openai-demo-csharp` の実行
+1. `azd env refresh -e {環境名}` を実行 
+- このコマンドを実行するには `azd` 環境名、サブスクリプション ID、リージョンが必要であることに注意してください。 これで、`azd`環境の`.env`ファイルに、アプリをローカルで実行するために必要なすべての設定が入力されます。
+4. `pwsh ./scripts/roles.ps1`を実行 
+- これは必要なロールをすべてユーザに割り当て、ローカルでアプリを実行できるようにします。 ユーザがサブスクリプションでロールを作成するのに必要な権限を持っていない場合は、このスクリプトを実行する必要があるかもしれません。`azd.env`ファイルまたはシェルで、環境変数`AZURE_PRINCIPAL_ID`を自分の`Azure ID`に設定してください。
 
-#### Clean up resources
+#### リソースのクリーンアップ
 
-Run `azd down`
+1. `azd down`の実行
 
-### Quickstart
+### クイックスタート
 
-* In Azure: navigate to the Azure Static Web App deployed by `azd`. The URL is printed out when `azd` completes (as "Endpoint"), or you can find it in the Azure portal.
-* When running locally, navigate to <https://localhost:7181> for the client app and <https://localhost:7181/swagger> for the Open API server page.
+* Azure の場合:
+ `azd` によってデプロイされた Azure Static Web App に移動する。URL は `azd` が完了したときに出力される`Endpoint`か、Azure ポータルで確認できます。
 
-Once in the web app:
+* ローカルで実行する場合:
+クライアント・アプリは<https://localhost:7181>に、Open APIサーバーは<https://localhost:7181/swagger>にアクセスしてください。
 
-* On the **Voice Chat** page, select the voice settings dialog and configure text-to-speech preferences.
-  * You can either type messages to interact with Blazor Clippy, or select the Speak toggle button to use speech-to-text as your input.
-* Try different topics in **Chat** or **Ask Questions** context. For chat, try follow up questions, clarifications, ask to simplify or elaborate on answer, etc.
-* Explore citations and sources
-* Click on the "settings" icon to try different options, tweak prompts, etc.
+#### サンプルアプリの設定方法
 
-## Resources
+* **音声チャット**ページで、音声設定ダイアログを選択し、音声合成設定を行います。
+  * **[Blazor Clippy]** と対話するためにメッセージを入力するか、**[Speak]** トグルボタンを選択して音声テキストを入力として使用することができます。
+* **[Chat]** または **[Ask]** のコンテキストでさまざまなトピックを試してみてください。チャットの場合は、フォローアップの質問、明確な説明、答えを簡単にしたり詳しく説明したりすることなどを試してみてください。
+
+* 引用と出典の設定
+  * **[設定]** アイコンをクリックすると、さまざまなオプションを試したり、プロンプトを微調整したりできます。
+
+## 参考情報
 
 * [Revolutionize your Enterprise Data with ChatGPT: Next-gen Apps w/ Azure OpenAI and Cognitive Search](https://aka.ms/entgptsearchblog)
 * [Azure Cognitive Search](https://learn.microsoft.com/azure/search/search-what-is-azure-search)
@@ -180,8 +185,11 @@ Once in the web app:
 > **Note**<br>
 > The PDF documents used in this demo contain information generated using a language model (Azure OpenAI Service). The information contained in these documents is only for demonstration purposes and does not reflect the opinions or beliefs of Microsoft. Microsoft makes no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability or availability with respect to the information contained in this document. All rights reserved to Microsoft.
 
-### FAQ
 
-***Question***: Why do we need to break up the PDFs into chunks when Azure Cognitive Search supports searching large documents?
+### よくある質問
 
-***Answer***: Chunking allows us to limit the amount of information we send to OpenAI due to token limits. By breaking up the content, it allows us to easily find potential chunks of text that we can inject into OpenAI. The method of chunking we use leverages a sliding window of text such that sentences that end one chunk will start the next. This allows us to reduce the chance of losing the context of the text.
+***質問***: 
+Azure Cognitive Searchは大きな文書の検索をサポートしているのに、なぜPDFをチャンクに分割する必要があるのでしょうか？
+
+***回答***: 
+チャンクによって、トークンの制限のためにOpenAIに送信する情報量を制限できます。コンテンツを分割することで、OpenAIに注入できる潜在的なテキストのチャンクを見つけることができます。私たちが使っているチャンクの方法は、あるチャンクが終わると次のチャンクが始まるように、テキストのスライディングウィンドウを活用します。これにより、テキストの文脈が失われる可能性を減らすことが可能です。
