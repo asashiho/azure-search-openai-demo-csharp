@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, shrink-to-fit=no" />
+  <meta charset="UTF-8">
+  <title>業務データを活用した生成AIチャットシステム ワークショップ</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/docsify-themeable/dist/css/theme-simple.css" />
+  <link rel="icon" href="/favicon.ico" id="favicon">
+  <!-- <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/themes/vue.css" /> -->
+  
+  <style>
+    :root {
+      /* Reduce the font size */
+      /* --base-font-size: 14px; */
+
+      /* Change the theme color hue (0-360) */
+      /* --theme-hue: 325; */
+
+      /* Add sidebar navigation bullets */
+      /* --sidebar-nav-link-before-content-l1: "😀"; */
+      /* --sidebar-nav-link-before-content-l2: "💩"; */
+
+      --base-font-size: 16px;
+      --heading-h1-font-size: var(--font-size-xl);
+      --cover-heading-font-size-max: var(--font-size-xxs);
+      --theme-color   : cornflowerblue;
+      --cover-background-color: lightsteelblue;
+      --cover-background-mask-opacity: 0;
+      --cover-background-mask-visibility: false;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script>
+    window.$docsify = {
+      coverpage: "coverpage.md",
+      homepage: "README.md",
+      auto2top: true,
+      maxLevel: 2,
+      subMaxLevel: 2,
+
+      themeable: {
+        // readyTransition : false,
+        // responsiveTables: false
+      }
+    }
+  </script>
+  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-json.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bicep.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-java.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-javascript.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-csharp.min.js"></script>
+
+  <!-- 6. Docsify Plugins -->
+  <script src="https://unpkg.com/docsify/lib/plugins/search.js"></script>
+  <script src="https://unpkg.com/docsify-copy-code"></script>
+  <script src="https://unpkg.com/docsify-pagination/dist/docsify-pagination.min.js"></script>
+  <script src="https://unpkg.com/docsify/lib/plugins/zoom-image.min.js"></script>
+</body>
+
+</html>
