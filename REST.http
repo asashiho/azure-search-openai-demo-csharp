@@ -1,0 +1,26 @@
+###
+
+POST https://xxxx.xxxx.azurecontainerapps.io/api/chat
+content-type: application/json
+
+{
+  "history": [
+    {
+      "user": "水素ハイブリット電車とは",
+      "bot": null
+    }
+  ],
+  "overrides": {
+    "semanticRanker": false,
+    "semanticCaptions": null,
+    "excludeCategory": null,
+    "top": 3,
+    "temperature": null,
+    "promptTemplate": null,
+    "promptTemplatePrefix": null,
+    "promptTemplateSuffix": null,
+    "suggestFollowupQuestions": true
+  },
+  "lastUserQuestion": "",
+  "approach": 0
+}
